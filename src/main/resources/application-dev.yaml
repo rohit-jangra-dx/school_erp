@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/school_erp
+    username: erp_admin
+    password: erp_admin_password
+
+logging:
+  level:
+    '[org.example.schoolerp]': debug
+    '[org.hibernate.sql]': debug
+
