@@ -3,11 +3,11 @@ spring:
     active: dev
   application:
     name: schoolErp
-  # jpa:
-  #   hibernate:
-  #     ddl-auto: validate
-  # flyway:
-  #   enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
   servlet:
     multipart:
       max-file-size: 10MB
