@@ -4,6 +4,10 @@ spring:
     username: erp_admin
     password: erp_admin_password
 
+school-erp:
+  security:
+    permission-scan-package: org.example.schoolerp
+
 logging:
   level:
     '[org.example.schoolerp]': debug

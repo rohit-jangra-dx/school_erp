@@ -1,0 +1,3 @@
+school-erp:
+  security:
+    permission-scan-package: org.example.schoolerp.security.fixtures
