@@ -1,4 +1,4 @@
-package org.example.schoolerp.identity;
+package org.example.schoolerp.identity.entity;
 
 import java.util.HashSet;
 import java.util.Set;

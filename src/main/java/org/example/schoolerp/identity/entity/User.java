@@ -1,4 +1,4 @@
-package org.example.schoolerp.identity;
+package org.example.schoolerp.identity.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +14,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class User extends OrganizationOwned{
-   
+    
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @ManyToMany
     @JoinTable(
         name = "user_roles",

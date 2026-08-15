@@ -2,8 +2,8 @@ package org.example.schoolerp.security;
 
 import java.util.Set;
 
-import org.example.schoolerp.identity.Permission;
-import org.example.schoolerp.identity.PermissionRepository;
+import org.example.schoolerp.identity.entity.Permission;
+import org.example.schoolerp.identity.repos.PermissionRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
