@@ -7,6 +7,8 @@ spring:
 school-erp:
   security:
     permission-scan-package: org.example.schoolerp
+    secret-key: very-secure-development-mode-only-key
+    access-token-expiration: 1200000
 
 logging:
   level:
