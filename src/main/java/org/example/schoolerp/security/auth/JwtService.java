@@ -1,6 +1,7 @@
 package org.example.schoolerp.security.auth;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -33,7 +34,7 @@ public class JwtService {
                 .subject(authAccount.getUser().getUsername())
                 .claim(
                         ORGANIZATION_ID_CLAIM,
-                        authAccount.getUser().getOrganization().getId())
+                        authAccount.getUser().getOrganizationId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
@@ -44,8 +45,8 @@ public class JwtService {
         return parseClaims(token).getSubject();
     }
 
-    public Long extractOrganizationId(String token) {
-        return parseClaims(token).get(ORGANIZATION_ID_CLAIM, Long.class);
+    public UUID extractOrganizationId(String token) {
+        return parseClaims(token).get(ORGANIZATION_ID_CLAIM, UUID.class);
     }
     
     public boolean isValid(String token, String expectedUsername) {
