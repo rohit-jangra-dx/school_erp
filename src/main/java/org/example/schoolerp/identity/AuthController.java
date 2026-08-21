@@ -1,7 +1,10 @@
 package org.example.schoolerp.identity;
 
+import java.util.UUID;
+
 import org.example.schoolerp.identity.repos.AuthAccountRepository;
 import org.example.schoolerp.security.auth.JwtService;
+import org.example.schoolerp.security.tenant.TenantContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,21 +26,34 @@ public class AuthController {
 
     @Data
     public static class LoginRequest {
+        private UUID organizationId;
         private String username;
         private String password;
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
         
-        var authAccount = authAccountRepository.findByUserUsername(request.username)
-            .orElseThrow(() -> new IllegalArgumentException("User not found: " + request.getUsername()));
+        // The second case where u need to manually feed the organizationId
+        TenantContext.set(request.getOrganizationId());
 
-        String token = jwtService.generateToken(authAccount);
-        return ResponseEntity.ok(token);
+        try {
+            
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+
+            var authAccount = authAccountRepository.findByUserUsername(request.username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + request.getUsername()));
+
+            String token = jwtService.generateToken(authAccount);
+            return ResponseEntity.ok(token);
+            
+        } finally {
+            TenantContext.clear();
+        }
+        
+
     }
     
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class User extends OrganizationOwned{
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @ManyToMany
