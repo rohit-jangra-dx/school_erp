@@ -12,7 +12,7 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
      * Only two cases where there will be no tenant_id in the system. First during startup, second
      * When during login, once authenticated, there must always be tenant_id found in the context.
      */
-    private static final UUID NO_TENANT = new UUID(0L, 0L);
+    public static final UUID NO_TENANT = new UUID(0L, 0L);
 
     @Override
     public UUID resolveCurrentTenantIdentifier() {

@@ -42,14 +42,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String username = jwtService.extractUsername(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // setup tenant context before accessing any repo
+                UUID organizationId = jwtService.extractOrganizationId(token);
+                TenantContext.set(organizationId);
+                
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
                 if (jwtService.isValid(token, username)) {
-
-                    // setup tenant context
-                    UUID organizationId = jwtService.extractOrganizationId(token);
-
-                    TenantContext.set(organizationId);
 
                     var authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
                             userDetails.getAuthorities());

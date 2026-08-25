@@ -46,7 +46,8 @@ public class JwtService {
     }
 
     public UUID extractOrganizationId(String token) {
-        return parseClaims(token).get(ORGANIZATION_ID_CLAIM, UUID.class);
+        String orgIdStr = parseClaims(token).get(ORGANIZATION_ID_CLAIM, String.class);
+        return orgIdStr != null ? UUID.fromString(orgIdStr) : null;
     }
     
     public boolean isValid(String token, String expectedUsername) {

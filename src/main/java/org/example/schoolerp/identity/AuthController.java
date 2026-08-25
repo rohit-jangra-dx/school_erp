@@ -2,8 +2,6 @@ package org.example.schoolerp.identity;
 
 import java.util.UUID;
 
-import org.example.schoolerp.identity.repos.AuthAccountRepository;
-import org.example.schoolerp.security.auth.JwtService;
 import org.example.schoolerp.security.tenant.TenantContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,9 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class AuthController {
    
-    private final AuthAccountRepository authAccountRepository;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final AuthService authService;
 
     @Data
     public static class LoginRequest {
@@ -43,10 +40,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            var authAccount = authAccountRepository.findByUserUsername(request.username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + request.getUsername()));
-
-            String token = jwtService.generateToken(authAccount);
+            var token =  authService.generateTokenFromUsername(request.getUsername());
             return ResponseEntity.ok(token);
             
         } finally {

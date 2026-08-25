@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +19,14 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     
     private final AuthAccountRepository authAccountRepository;
 
+    /**
+     * Note:- OSIV is set to false, which means for lazy fields it will be pain since no open sessions
+     * outside the fetch, for that transactional makes the whole unit of work in single transaction (to keep the session open).
+     */
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         // check if user exists or not
         AuthAccount account = authAccountRepository.findByUserUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("No user: " + username));
