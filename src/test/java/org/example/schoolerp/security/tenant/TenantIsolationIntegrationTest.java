@@ -1,10 +1,8 @@
 package org.example.schoolerp.security.tenant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
-import org.example.schoolerp.identity.entity.*;
 import org.example.schoolerp.identity.repos.UserRepository;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.testsupport.TenantFixtures;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 
 
 @SpringBootTest
@@ -38,8 +35,8 @@ public class TenantIsolationIntegrationTest  extends TenantTestSupport{
         orgA = tenantFixtures.createOrg("A");
         orgB = tenantFixtures.createOrg("B");
 
-        tenantA = asTenant(orgA.getId(), () -> tenantFixtures.createOrgWithUser(orgA, "TA", "TAAA"));
-        tenantB = asTenant(orgB.getId(), () -> tenantFixtures.createOrgWithUser(orgB, "TB", "TBBB"));
+        tenantA = asTenant(orgA.getId(), () -> tenantFixtures.createUser(orgA, "TA", "TAAA"));
+        tenantB = asTenant(orgB.getId(), () -> tenantFixtures.createUser(orgB, "TB", "TBBB"));
     }
 
     @AfterEach
@@ -67,15 +64,5 @@ public class TenantIsolationIntegrationTest  extends TenantTestSupport{
         TenantContext.clear();
         var users = newTx().execute(status -> userRepository.findAll());
         assertThat(users).isEmpty();
-    }
-
-    @Test
-    void noTenantContext_shouldRejectWritesWithAssignedTenant() {
-        TenantContext.clear();
-        assertThatThrownBy(() ->
-            newTx().executeWithoutResult(status -> 
-                userRepository.save(new User("orphan", orgA))
-            )
-        ).isInstanceOf(DataIntegrityViolationException.class);  
     }
 }

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.example.schoolerp.core.OrganizationOwned;
-import org.example.schoolerp.organization.Organization;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,8 +26,7 @@ public class User extends OrganizationOwned{
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username, Organization organization) {
-        super(organization);
+    public User(String username) {
         this.username = username;
     }
 

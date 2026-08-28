@@ -39,8 +39,8 @@ public class LoginTenantIntegrationTest extends TenantTestSupport {
         Organization orgA = fixtures.createOrg("LoginOrgA");
         Organization orgB = fixtures.createOrg("LoginOrgB");
 
-        tenantA = asTenant(orgA.getId(),() -> fixtures.createOrgWithUser(orgA, "alice", "correct-horse"));
-        tenantB = asTenant(orgB.getId() ,() -> fixtures.createOrgWithUser(orgB, "bob", "battery-staple"));
+        tenantA = asTenant(orgA.getId(),() -> fixtures.createUser(orgA, "alice", "correct-horse"));
+        tenantB = asTenant(orgB.getId() ,() -> fixtures.createUser(orgB, "bob", "battery-staple"));
     }
 
     @AfterEach

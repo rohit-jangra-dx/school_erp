@@ -20,6 +20,7 @@ public abstract class OrganizationOwned extends Base{
     @Column(name = "organization_id", nullable = false, updatable = false)
     private UUID organizationId;
 
+    // readonly association
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
         name = "organization_id",
@@ -28,9 +29,4 @@ public abstract class OrganizationOwned extends Base{
         updatable = false
     )
     private Organization organization;
-    
-    protected OrganizationOwned(Organization organization) {
-        this.organization = organization;
-        this.organizationId = organization.getId();
-    }
 }

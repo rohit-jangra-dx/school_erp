@@ -31,8 +31,8 @@ public class TenantFixtures {
      * inside asTenant(...)/newTx() with TenantContext already set.
      * (org creation is tenant-native) followed by the correct tenant.
      */
-    public TenantFixture createOrgWithUser(Organization org, String username, String rawPassword) {
-        User user = userRepository.save(new User(username, org));
+    public TenantFixture createUser(Organization org, String username, String rawPassword) {
+        User user = userRepository.save(new User(username));
         AuthAccount authAccount = new AuthAccount(user, passwordEncoder.encode(rawPassword));
         authAccountRepository.save(authAccount);
         return new TenantFixture(org.getId(), org, user, authAccount);
