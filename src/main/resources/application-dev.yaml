@@ -9,6 +9,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  output:
+    ansi:
+      enabled: always
      
 
 school-erp:
@@ -21,6 +24,8 @@ logging:
   level:
     '[org.example.schoolerp]': debug
     '[org.springframework.security]': debug
+  pattern:
+    console: "%d{HH:mm:ss} %highlight(%-5level) [%X{correlationId}] %cyan([%logger{0}]) - %msg%n"
 
     # org.hibernate.SQL: DEBUG
     # org.hibernate.sql.exec: DEBUG
