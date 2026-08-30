@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: spotless
+        name: Spotless formatting
+        entry: mvn spotless:apply
+        language: system
+        pass_filenames: false
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-merge-conflict

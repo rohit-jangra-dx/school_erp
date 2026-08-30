@@ -1,5 +1,6 @@
 package org.example.schoolerp.security;
 
+import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.security.auth.JwtAuthFilter;
 import org.example.schoolerp.security.auth.RestAccessDeniedHandler;
 import org.example.schoolerp.security.auth.RestAuthEntrypoint;
@@ -16,45 +17,43 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
-    private final RestAuthEntrypoint restAuthEntrypoint;
-    private final RestAccessDeniedHandler restAccessDeniedHandler;
+  private final JwtAuthFilter jwtAuthFilter;
+  private final RestAuthEntrypoint restAuthEntrypoint;
+  private final RestAccessDeniedHandler restAccessDeniedHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-        return config.getAuthenticationManager();
-    }
-        
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> 
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register", "/login", "/csrf").permitAll()
-                .anyRequest().authenticated()          
-        )
-        .exceptionHandling(exc -> exc
-            .authenticationEntryPoint(restAuthEntrypoint)
-            .accessDeniedHandler(restAccessDeniedHandler)
-        )
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+    return config.getAuthenticationManager();
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    http.csrf(csrf -> csrf.disable())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/register", "/login", "/csrf")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .exceptionHandling(
+            exc ->
+                exc.authenticationEntryPoint(restAuthEntrypoint)
+                    .accessDeniedHandler(restAccessDeniedHandler))
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 }

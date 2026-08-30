@@ -3,20 +3,20 @@ package org.example.schoolerp.security.tenant;
 import java.util.UUID;
 
 public class TenantContext {
-    
-    private static final ThreadLocal<UUID> CURRENT_TENANT = new ThreadLocal<>();
 
-    private TenantContext() {}
+  private static final ThreadLocal<UUID> CURRENT_TENANT = new ThreadLocal<>();
 
-    public static void set(UUID tenantId) {
-        CURRENT_TENANT.set(tenantId);
-    }
+  private TenantContext() {}
 
-    public static UUID get() {
-        return CURRENT_TENANT.get();
-    }
+  public static void set(UUID tenantId) {
+    CURRENT_TENANT.set(tenantId);
+  }
 
-    public static void clear() {
-        CURRENT_TENANT.remove();
-    }
+  public static UUID get() {
+    return CURRENT_TENANT.get();
+  }
+
+  public static void clear() {
+    CURRENT_TENANT.remove();
+  }
 }

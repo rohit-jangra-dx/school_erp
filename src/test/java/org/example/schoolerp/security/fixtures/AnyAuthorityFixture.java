@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnyAuthorityFixture {
 
-    @PreAuthorize("""
+  @PreAuthorize(
+      """
         hasAnyAuthority(
             'student:create',
             'student:update',
             'student:delete'
         )
         """)
-    public void modifyStudent() {
-    }
+  public void modifyStudent() {}
 }

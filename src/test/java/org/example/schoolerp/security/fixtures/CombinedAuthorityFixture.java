@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CombinedAuthorityFixture {
 
-    @PreAuthorize("""
+  @PreAuthorize(
+      """
         hasAuthority('student:read') ||
         hasAnyAuthority(
             'student:update',
             'student:delete'
         )
         """)
-    public void manageStudent() {
-    }
+  public void manageStudent() {}
 }

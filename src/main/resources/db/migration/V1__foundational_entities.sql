@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
         FOREIGN KEY (user_id)
         REFERENCES users(id)
         ON DELETE CASCADE,
-    
+
     CONSTRAINT fk_user_roles_role
         FOREIGN KEY (role_id)
         REFERENCES roles(id)
@@ -56,12 +56,12 @@ CREATE TABLE IF NOT EXISTS role_permissions (
 
     PRIMARY KEY (role_id, permission_id),
 
-    CONSTRAINT fk_role_permissions_role 
+    CONSTRAINT fk_role_permissions_role
         FOREIGN KEY (role_id)
         REFERENCES roles(id)
         ON DELETE CASCADE,
-    
-    CONSTRAINT fk_role_permissions_permission 
+
+    CONSTRAINT fk_role_permissions_permission
         FOREIGN KEY (permission_id)
         REFERENCES permissions(id)
         ON DELETE CASCADE
