@@ -3,7 +3,7 @@ package org.example.schoolerp.identity;
 import java.util.UUID;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.example.schoolerp.identity.service.RegisterationService;
+import org.example.schoolerp.identity.service.AuthService;
 import org.example.schoolerp.security.tenant.TenantContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-  private static final String USER_ROLE = "ROLE_USER";
   private final AuthenticationManager authenticationManager;
-  private final RegisterationService registerationService;
+  private final AuthService authService;
 
   @Data
   public static class LoginRequest {
@@ -37,10 +36,9 @@ public class AuthController {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-      var registerationResult =
-          registerationService.registerAndAuthenticate(
-              request.getUsername(), request.getPassword(), USER_ROLE);
-      return ResponseEntity.ok(registerationResult.token());
+      var token = authService.generateToken(request.getUsername());
+
+      return ResponseEntity.ok(token);
 
     } finally {
       TenantContext.clear();

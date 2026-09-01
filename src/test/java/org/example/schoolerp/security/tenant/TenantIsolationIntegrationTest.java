@@ -6,7 +6,6 @@ import org.example.schoolerp.identity.repo.UserRepository;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.testsupport.TenantFixtures;
 import org.example.schoolerp.testsupport.TenantTestSupport;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +30,6 @@ public class TenantIsolationIntegrationTest extends TenantTestSupport {
 
     tenantA = asTenant(orgA.getId(), () -> tenantFixtures.createUser(orgA, "TA", "TAAA"));
     tenantB = asTenant(orgB.getId(), () -> tenantFixtures.createUser(orgB, "TB", "TBBB"));
-  }
-
-  @AfterEach
-  void cleanupTenantContext() {
-    asTenantVoid(tenantA.orgId(), () -> tenantFixtures.deleteTenantData());
-    asTenantVoid(tenantB.orgId(), () -> tenantFixtures.deleteTenantData());
-
-    newTx().executeWithoutResult(state -> tenantFixtures.deleteAllOrganizations());
   }
 
   @Test

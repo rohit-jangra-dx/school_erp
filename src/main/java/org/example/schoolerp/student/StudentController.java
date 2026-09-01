@@ -10,6 +10,7 @@ import org.example.schoolerp.student.dto.CreateStudentResponse;
 import org.example.schoolerp.student.service.ImportResult;
 import org.example.schoolerp.student.service.StudentImportService;
 import org.example.schoolerp.student.service.StudentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class StudentController {
       @Valid @RequestBody CreateStudentRequest studentRequest) {
 
     var res = studentService.create(studentRequest);
-    return ResponseEntity.ok(res);
+    return ResponseEntity.status(HttpStatus.CREATED).body(res);
   }
 
   @GetMapping("/import/template")

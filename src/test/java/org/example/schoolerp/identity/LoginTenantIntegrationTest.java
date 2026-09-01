@@ -8,11 +8,12 @@ import java.util.UUID;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.security.auth.JwtService;
 import org.example.schoolerp.security.tenant.TenantContext;
+import org.example.schoolerp.testsupport.DatabaseCleanupExtension;
 import org.example.schoolerp.testsupport.TenantFixtures;
 import org.example.schoolerp.testsupport.TenantTestSupport;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(DatabaseCleanupExtension.class)
 public class LoginTenantIntegrationTest extends TenantTestSupport {
 
   @Autowired private MockMvc mockMvc;
@@ -37,13 +39,6 @@ public class LoginTenantIntegrationTest extends TenantTestSupport {
 
     tenantA = asTenant(orgA.getId(), () -> fixtures.createUser(orgA, "alice", "correct-horse"));
     tenantB = asTenant(orgB.getId(), () -> fixtures.createUser(orgB, "bob", "battery-staple"));
-  }
-
-  @AfterEach
-  void cleanup() {
-    asTenantVoid(tenantA.orgId(), () -> fixtures.deleteTenantData());
-    asTenantVoid(tenantB.orgId(), () -> fixtures.deleteTenantData());
-    newTx().executeWithoutResult(status -> fixtures.deleteAllOrganizations());
   }
 
   @Test

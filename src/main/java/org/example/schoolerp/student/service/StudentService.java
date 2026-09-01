@@ -2,7 +2,7 @@ package org.example.schoolerp.student.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.schoolerp.identity.service.RegisterationService;
+import org.example.schoolerp.identity.service.RegistrationService;
 import org.example.schoolerp.student.Student;
 import org.example.schoolerp.student.StudentRepository;
 import org.example.schoolerp.student.dto.CreateStudentRequest;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class StudentService {
   private static final String STUDENT_ROLE = "ROLE_STUDENT";
-  private final RegisterationService registerationService;
+  private final RegistrationService registerationService;
   private final StudentRepository studentRepository;
 
   /**
@@ -41,7 +41,7 @@ public class StudentService {
             studentRequest.getDob(),
             studentRequest.getGender(),
             studentRequest.getAddress(),
-            studentRequest.getCurrenRollNumber(),
+            studentRequest.getCurrentRollNumber(),
             studentRequest.getCurrentClass());
 
     studentRepository.save(student);

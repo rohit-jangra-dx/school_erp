@@ -7,13 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterationService {
+public class RegistrationService {
 
   private final AuthService authService;
   private final AuthAccountService authAccountService;
   private final UserService userService;
 
-  public record RegisterationResult(String username, String token) {}
+  public record RegistrationResult(String username, String token) {}
 
   @Transactional
   public User registerUser(String username, String password, String roleName) {
@@ -24,13 +24,13 @@ public class RegisterationService {
   }
 
   @Transactional
-  public RegisterationResult registerAndAuthenticate(
+  public RegistrationResult registerAndAuthenticate(
       String username, String password, String roleName) {
     var user = userService.create(username, roleName);
     var authAccount = authAccountService.create(user, password);
 
     var token = authService.generateToken(authAccount);
 
-    return new RegisterationResult(user.getUsername(), token);
+    return new RegistrationResult(user.getUsername(), token);
   }
 }

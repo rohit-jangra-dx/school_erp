@@ -85,6 +85,7 @@ public class StudentImportService {
           }
 
           studentService.create(studentRequest);
+          imported++;
 
         } catch (NumberFormatException e) {
           errors.add(
@@ -145,7 +146,7 @@ public class StudentImportService {
     request.setDob(LocalDate.parse(columns[StudentCsv.DOB_INDEX].trim()));
     request.setGender(columns[StudentCsv.GENDER_INDEX].trim());
     request.setAddress(columns[StudentCsv.ADDRESS_INDEX].trim());
-    request.setCurrenRollNumber(Integer.parseInt(columns[StudentCsv.ROLL_NUMBER_INDEX].trim()));
+    request.setCurrentRollNumber(Integer.parseInt(columns[StudentCsv.ROLL_NUMBER_INDEX].trim()));
     request.setCurrentClass(Integer.parseInt(columns[StudentCsv.CURRENT_CLASS_INDEX].trim()));
 
     return request;

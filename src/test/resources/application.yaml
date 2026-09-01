@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/school_erp_test
+    username: erp_admin
+    password: erp_admin_password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    # show-sql: true
+    open-in-view: false
+  output:
+    ansi:
+      enabled: always
+school-erp:
+  security:
+    permission-scan-package: org.example.schoolerp.security.fixtures
+    secret-key: very-secure-development-mode-only-key
+    access-token-expiration: 1200000
+logging:
+  level:
+    '[org.springframework.security]': debug

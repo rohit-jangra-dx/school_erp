@@ -18,7 +18,7 @@ public class CreateStudentRequest {
 
   @NotBlank private String address;
 
-  @NotNull private Integer currenRollNumber;
+  @NotNull private Integer currentRollNumber;
 
   @NotNull private Integer currentClass;
 }
