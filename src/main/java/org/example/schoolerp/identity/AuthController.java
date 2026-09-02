@@ -1,5 +1,6 @@
 package org.example.schoolerp.identity;
 
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+  public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
 
     // The second case where u need to manually feed the organizationId
     TenantContext.set(request.getOrganizationId());

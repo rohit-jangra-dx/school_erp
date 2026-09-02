@@ -2,6 +2,8 @@ package org.example.schoolerp.student;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schoolerp.core.OrganizationOwned;
@@ -32,6 +34,13 @@ public class Student extends OrganizationOwned {
 
   private Integer currentRollNumber;
 
+  @ManyToMany
+  @JoinTable(
+      name = "student_guardians",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "guardian_id"))
+  private Set<Guardian> guardians = new HashSet<>();
+
   /**
    * FIXME: current i am just passing fixed static values, but class can be associated with the
    * class Entity
@@ -55,5 +64,15 @@ public class Student extends OrganizationOwned {
     this.address = address;
     this.currentRollNumber = currentRollNumber;
     this.currentClass = currentClass;
+  }
+
+  public void addGuardian(Guardian guardian) {
+    guardians.add(guardian);
+    guardian.getStudents().add(this);
+  }
+
+  public void removeGuardian(Guardian guardian) {
+    guardians.remove(guardian);
+    guardian.getStudents().remove(this);
   }
 }

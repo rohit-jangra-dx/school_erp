@@ -1,10 +1,15 @@
 package org.example.schoolerp.student.service;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.schoolerp.identity.service.RegistrationService;
+import org.example.schoolerp.student.Guardian;
+import org.example.schoolerp.student.GuardianRepository;
 import org.example.schoolerp.student.Student;
 import org.example.schoolerp.student.StudentRepository;
+import org.example.schoolerp.student.dto.CreateGuardianRequest;
+import org.example.schoolerp.student.dto.CreateGuardianResponse;
 import org.example.schoolerp.student.dto.CreateStudentRequest;
 import org.example.schoolerp.student.dto.CreateStudentResponse;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,7 @@ public class StudentService {
   private static final String STUDENT_ROLE = "ROLE_STUDENT";
   private final RegistrationService registerationService;
   private final StudentRepository studentRepository;
+  private final GuardianRepository guardianRepository;
 
   /**
    * createStudent creates the student + user + authAccount records. it sets the user's role to
@@ -47,8 +53,55 @@ public class StudentService {
     studentRepository.save(student);
 
     var res = new CreateStudentResponse();
+    res.setId(student.getId());
     res.setUsername(username);
 
     return res;
+  }
+
+  @Transactional
+  public CreateGuardianResponse addGuardian(UUID studentId, CreateGuardianRequest request) {
+    var student =
+        studentRepository
+            .findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+
+    var guardian =
+        guardianRepository
+            .findByEmailAndRelation(request.getEmail(), request.getRelation())
+            .orElseGet(
+                () -> {
+                  var newGuardian =
+                      new Guardian(
+                          request.getFullName(),
+                          request.getEmail(),
+                          request.getPhoneNo(),
+                          request.getRelation());
+
+                  return guardianRepository.save(newGuardian);
+                });
+
+    student.addGuardian(guardian);
+
+    var res = new CreateGuardianResponse();
+    res.setFullName(guardian.getFullName());
+    res.setId(guardian.getId());
+
+    return res;
+  }
+
+  @Transactional
+  public void removeGuardian(UUID studentId, UUID guardianId) {
+    var student =
+        studentRepository
+            .findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+
+    var guardian =
+        guardianRepository
+            .findById(guardianId)
+            .orElseThrow(() -> new IllegalArgumentException("Guardian not found: " + guardianId));
+
+    student.removeGuardian(guardian);
   }
 }
