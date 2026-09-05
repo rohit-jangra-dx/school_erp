@@ -18,4 +18,5 @@ school-erp:
     access-token-expiration: 1200000
 logging:
   level:
-    '[org.springframework.security]': debug
+    '[org.springframework.security]': debug,
+    '[org.example.schoolerp]': debug
