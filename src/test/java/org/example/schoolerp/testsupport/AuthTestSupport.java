@@ -4,6 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
+
+import org.example.schoolerp.identity.repo.UserRepository;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.security.auth.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class AuthTestSupport extends TenantTestSupport {
   @Autowired protected MockMvc mockMvc;
   @Autowired protected TenantFixtures fixtures;
   @Autowired protected JwtService jwtService;
+  
+  @Autowired protected UserRepository userRepository;
 
   public record LoggedInUser(
       UUID orgId, Organization organization, String username, String token) {}
@@ -52,6 +56,30 @@ public class AuthTestSupport extends TenantTestSupport {
 
     String token = result.getResponse().getContentAsString();
     return new LoggedInUser(org.getId(), org, username, token);
+  }
+
+  protected LoggedInUser loginAsExistingUser(String orgName, String username, String password) throws Exception {
+    Organization org = fixtures.createOrg(orgName);
+
+    String body =
+        """
+                {"organizationId": "%s","username":"%s","password":"%s"}
+                """
+            .formatted(org.getId(), username, password);
+
+    asTenantVoid(org.getId(), () -> {
+       userRepository.findByUsername(username).ifPresent(user -> System.out.println("DEBUG:>" + user.getUsername())); 
+    });
+
+    var result =
+        mockMvc
+            .perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(body))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String token = result.getResponse().getContentAsString();
+    return new LoggedInUser(org.getId(), org, username, token);
+
   }
 
   /* Attaches the Bearer token to any MockMvc request builder */

@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class CreateStudentRequest {
-  @Email private String email;
+  @NotBlank @Email private String email;
 
   @NotBlank private String fullName;
 
