@@ -1,15 +1,12 @@
 package org.example.schoolerp.staff;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
 import lombok.Data;
 
 @Data
 public class CreateTeacherResponse {
-   @NotBlank
-   private UUID id;
+  @NotBlank private UUID id;
 
-   @NotBlank
-   private String username; 
+  @NotBlank private String username;
 }

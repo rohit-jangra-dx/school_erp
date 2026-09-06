@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Data;
 
+// TODO: add proper validations
 @Data
 public class CreateStudentRequest {
   @NotBlank @Email private String email;

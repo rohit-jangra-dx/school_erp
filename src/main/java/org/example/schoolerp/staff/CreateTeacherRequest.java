@@ -1,30 +1,23 @@
 package org.example.schoolerp.staff;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 
+// TODO: add proper validations
 @Data
 public class CreateTeacherRequest {
-    @NotBlank
-    private String fullName;
-    
-    @NotBlank
-    private String phoneNo;
+  @NotBlank private String fullName;
 
-    @Email
-    @NotBlank
-    private String email;
-    
-    @NotNull
-    private LocalDate dob;
+  @NotBlank private String phoneNo;
 
-    @NotBlank
-    private String gender;
+  @Email @NotBlank private String email;
 
-    @NotBlank
-    private String address;
+  @NotNull private LocalDate dob;
+
+  @NotBlank private String gender;
+
+  @NotBlank private String address;
 }

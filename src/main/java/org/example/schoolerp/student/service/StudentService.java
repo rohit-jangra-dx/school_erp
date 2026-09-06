@@ -2,7 +2,6 @@ package org.example.schoolerp.student.service;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.schoolerp.identity.service.RegistrationService;
 import org.example.schoolerp.student.Guardian;
 import org.example.schoolerp.student.GuardianRepository;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class StudentService {
   private static final String STUDENT_ROLE = "ROLE_STUDENT";
   private final RegistrationService registerationService;
