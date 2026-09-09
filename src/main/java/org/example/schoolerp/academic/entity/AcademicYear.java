@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -17,4 +17,9 @@ public class AcademicYear extends OrganizationOwned {
 
   @Column(name = "end_date", nullable = false)
   private LocalDate endDate;
+
+  public AcademicYear(LocalDate startDate, LocalDate endDate) {
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
 }

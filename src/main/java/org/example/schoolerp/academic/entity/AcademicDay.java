@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -32,8 +32,9 @@ public class AcademicDay extends OrganizationOwned {
   @Column(name = "note")
   private String note;
 
-  public AcademicDay(AcademicYear academicYear, DayType dayType) {
+  public AcademicDay(AcademicYear academicYear, LocalDate date, DayType dayType) {
     this.academicYear = academicYear;
+    this.date = date;
     this.dayType = dayType;
   }
 

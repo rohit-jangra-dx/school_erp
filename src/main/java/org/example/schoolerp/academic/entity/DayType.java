@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 public enum DayType {
   WORKING,

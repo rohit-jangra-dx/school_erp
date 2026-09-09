@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,7 +35,6 @@ public class ClassSection extends OrganizationOwned {
   @Column(nullable = false)
   private Integer capacity;
 
-  // TODO: later add class_teacher_id for Homeroom teacher
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "teacher_id", nullable = false)
   private Teacher teacher;
