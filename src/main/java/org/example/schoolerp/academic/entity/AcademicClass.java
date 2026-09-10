@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

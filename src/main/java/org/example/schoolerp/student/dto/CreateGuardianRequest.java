@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+// TODO: add proper validations
 @Data
 public class CreateGuardianRequest {
   @NotNull private String fullName;

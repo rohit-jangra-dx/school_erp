@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 import org.example.schoolerp.core.OrganizationOwned;
 import org.example.schoolerp.staff.Teacher;
 
+/**
+ * NOTE: This is somethign to remind myself as i can't remember right now, there is somethign wrong
+ * or missing in the constraints. found one -> there is no uniquness constraint on name + class_id
+ * as section names should be unique per class
+ */
 @Entity
 @Table(
     name = "class_sections",
@@ -35,7 +40,6 @@ public class ClassSection extends OrganizationOwned {
   @Column(nullable = false)
   private Integer capacity;
 
-  // TODO: later add class_teacher_id for Homeroom teacher
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "teacher_id", nullable = false)
   private Teacher teacher;

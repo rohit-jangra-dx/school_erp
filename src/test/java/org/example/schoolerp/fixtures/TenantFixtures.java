@@ -1,4 +1,4 @@
-package org.example.schoolerp.testsupport;
+package org.example.schoolerp.fixtures;
 
 import java.util.UUID;
 import org.example.schoolerp.identity.entity.AuthAccount;
@@ -16,7 +16,6 @@ public class TenantFixtures {
 
   @Autowired private OrganizationRepository organizationRepository;
   @Autowired private UserRepository userRepository;
-  ;
   @Autowired private AuthAccountRepository authAccountRepository;
   @Autowired private PasswordEncoder passwordEncoder;
 

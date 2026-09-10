@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
-
+import org.example.schoolerp.fixtures.TenantFixtures;
 import org.example.schoolerp.identity.repo.UserRepository;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.security.auth.JwtService;
@@ -19,7 +19,7 @@ public class AuthTestSupport extends TenantTestSupport {
   @Autowired protected MockMvc mockMvc;
   @Autowired protected TenantFixtures fixtures;
   @Autowired protected JwtService jwtService;
-  
+
   @Autowired protected UserRepository userRepository;
 
   public record LoggedInUser(
@@ -58,8 +58,8 @@ public class AuthTestSupport extends TenantTestSupport {
     return new LoggedInUser(org.getId(), org, username, token);
   }
 
-  protected LoggedInUser loginAsExistingUser(String orgName, String username, String password) throws Exception {
-    Organization org = fixtures.createOrg(orgName);
+  protected LoggedInUser loginAsExistingUser(Organization org, String username, String password)
+      throws Exception {
 
     String body =
         """
@@ -67,9 +67,13 @@ public class AuthTestSupport extends TenantTestSupport {
                 """
             .formatted(org.getId(), username, password);
 
-    asTenantVoid(org.getId(), () -> {
-       userRepository.findByUsername(username).ifPresent(user -> System.out.println("DEBUG:>" + user.getUsername())); 
-    });
+    asTenantVoid(
+        org.getId(),
+        () -> {
+          userRepository
+              .findByUsername(username)
+              .ifPresent(user -> System.out.println("DEBUG:>" + user.getUsername()));
+        });
 
     var result =
         mockMvc
@@ -79,7 +83,6 @@ public class AuthTestSupport extends TenantTestSupport {
 
     String token = result.getResponse().getContentAsString();
     return new LoggedInUser(org.getId(), org, username, token);
-
   }
 
   /* Attaches the Bearer token to any MockMvc request builder */
