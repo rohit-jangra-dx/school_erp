@@ -14,7 +14,7 @@ public class TeacherService {
   private final TeacherRepository teacherRepository;
 
   @Transactional
-  public CreateTeacherResponse create(CreateTeacherRequest request) {
+  public TeacherResponse create(CreateTeacherRequest request) {
     var username = request.getEmail();
     var password = request.getDob().toString();
 
@@ -32,9 +32,7 @@ public class TeacherService {
 
     teacher = teacherRepository.save(teacher);
 
-    var response = new CreateTeacherResponse();
-    response.setId(teacher.getId());
-    response.setUsername(username);
+    var response = new TeacherResponse(teacher.getId(), teacher.getUser().getUsername());
 
     return response;
   }

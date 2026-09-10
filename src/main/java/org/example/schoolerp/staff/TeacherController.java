@@ -17,9 +17,9 @@ public class TeacherController {
   private final TeacherService teacherService;
 
   @PostMapping("")
-  public ResponseEntity<CreateTeacherResponse> createTeacher(
+  public ResponseEntity<TeacherResponse> createTeacher(
       @Valid @RequestBody CreateTeacherRequest request) {
-    CreateTeacherResponse response = teacherService.create(request);
+    TeacherResponse response = teacherService.create(request);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }

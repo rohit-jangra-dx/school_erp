@@ -53,10 +53,9 @@ public class TeacherCreationIntegrationTest extends AuthTestSupport {
             .andReturn();
 
     var response =
-        objectMapper.readValue(
-            result.getResponse().getContentAsString(), CreateTeacherResponse.class);
+        objectMapper.readValue(result.getResponse().getContentAsString(), TeacherResponse.class);
 
-    assertThat(response.getUsername()).isEqualTo("one@gmail.com");
+    assertThat(response.username()).isEqualTo("one@gmail.com");
 
     // to make sure legit loginable user got created
     var loggedInUser = loginAsExistingUser(admin.organization(), "one@gmail.com", "2023-12-02");

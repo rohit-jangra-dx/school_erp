@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import org.example.schoolerp.academic.dto.AcademicDayResponse;
+import org.example.schoolerp.academic.dto.AcademicYearResponse;
 import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
-import org.example.schoolerp.academic.dto.CreateAcademicCalendarResponse;
 import org.example.schoolerp.academic.service.AcademicCalendarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class AcademicCalendarController {
   }
 
   @PostMapping
-  public ResponseEntity<CreateAcademicCalendarResponse> createCalendar(
+  public ResponseEntity<AcademicYearResponse> createCalendar(
       @Valid @RequestBody CreateAcademicCalendarRequest entity) {
     var response =
         academicCalendarService.createCalendar(entity.getStartDate(), entity.getEndDate());
