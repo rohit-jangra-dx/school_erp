@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schoolerp.core.OrganizationOwned;
 
+/**
+ * FIXME: There is a possibility of creating duplicate years. No constraints on the startDate +
+ * OrganizationId there to enforce
+ */
 @Entity
 @Table(name = "academic_years")
 @Getter

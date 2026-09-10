@@ -2,9 +2,9 @@ package org.example.schoolerp.security.tenant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.example.schoolerp.fixtures.TenantFixtures;
 import org.example.schoolerp.identity.repo.UserRepository;
 import org.example.schoolerp.organization.Organization;
-import org.example.schoolerp.testsupport.TenantFixtures;
 import org.example.schoolerp.testsupport.TenantTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

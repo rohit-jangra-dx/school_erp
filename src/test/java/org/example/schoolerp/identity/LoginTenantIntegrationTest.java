@@ -5,11 +5,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
+import org.example.schoolerp.fixtures.TenantFixtures;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.security.auth.JwtService;
 import org.example.schoolerp.security.tenant.TenantContext;
 import org.example.schoolerp.testsupport.DatabaseCleanupExtension;
-import org.example.schoolerp.testsupport.TenantFixtures;
 import org.example.schoolerp.testsupport.TenantTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

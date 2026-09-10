@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import org.example.schoolerp.core.OrganizationOwned;
 import org.example.schoolerp.staff.Teacher;
 
+/**
+ * NOTE: This is somethign to remind myself as i can't remember right now, there is somethign wrong
+ * or missing in the constraints.
+ */
 @Entity
 @Table(
     name = "class_sections",

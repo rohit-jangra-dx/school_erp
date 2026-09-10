@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
+import org.example.schoolerp.fixtures.TenantFixtures;
 import org.example.schoolerp.identity.repo.UserRepository;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.security.auth.JwtService;
