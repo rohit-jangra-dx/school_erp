@@ -8,7 +8,8 @@ import org.example.schoolerp.staff.Teacher;
 
 /**
  * NOTE: This is somethign to remind myself as i can't remember right now, there is somethign wrong
- * or missing in the constraints.
+ * or missing in the constraints. found one -> there is no uniquness constraint on name + class_id
+ * as section names should be unique per class
  */
 @Entity
 @Table(

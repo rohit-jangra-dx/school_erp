@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
-import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
 import org.example.schoolerp.academic.entity.AcademicYear;
 import org.example.schoolerp.fixtures.AcademicFixtures;
 import org.example.schoolerp.staff.Teacher;
@@ -43,7 +41,7 @@ public class AcademicClassSectionCreationIntegrationTest extends AuthTestSupport
 
   @Test
   void create_academic_class_and_its_sections_successfully() throws Exception {
-    var request = new CreateAcademicClassRequest("1");
+    var request = fixtures.createAcademicClassRequest();
 
     var result =
         mockMvc
@@ -53,14 +51,13 @@ public class AcademicClassSectionCreationIntegrationTest extends AuthTestSupport
                     .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").isNotEmpty())
-            .andExpect(jsonPath("$.name").value("1"))
+            .andExpect(jsonPath("$.name").value(request.getName()))
             .andReturn();
 
     var classId = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
     // classSectionBody
-    var request2 =
-        new CreateClassSectionRequest(academicYear.getId(), teacher.getId(), "A", 10, 30);
+    var request2 = fixtures.createClassSectionRequest(academicYear.getId(), teacher.getId(), 0);
 
     mockMvc
         .perform(
@@ -68,7 +65,7 @@ public class AcademicClassSectionCreationIntegrationTest extends AuthTestSupport
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request2)))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.name").value("A"))
+        .andExpect(jsonPath("$.name").value(request2.getName()))
         .andExpect(jsonPath("$.id").isNotEmpty());
   }
 }
