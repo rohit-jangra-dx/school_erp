@@ -6,18 +6,16 @@ import lombok.NoArgsConstructor;
 import org.example.schoolerp.core.OrganizationOwned;
 import org.example.schoolerp.staff.Teacher;
 
-/**
- * NOTE: This is somethign to remind myself as i can't remember right now, there is somethign wrong
- * or missing in the constraints. found one -> there is no uniquness constraint on name + class_id
- * as section names should be unique per class
- */
 @Entity
 @Table(
     name = "class_sections",
     uniqueConstraints = {
       @UniqueConstraint(
-          name = "class_section_id_teacher",
-          columnNames = {"id", "teacher_id"})
+          name = "class_section_academic_year_teacher",
+          columnNames = {"academic_year_id", "teacher_id"}),
+      @UniqueConstraint(
+          name = "class_section_academic_year_class_name",
+          columnNames = {"academic_year_id", "academic_class_id", "name"})
     })
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)

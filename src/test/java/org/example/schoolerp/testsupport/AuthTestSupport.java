@@ -1,8 +1,11 @@
 package org.example.schoolerp.testsupport;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import java.util.UUID;
 import org.example.schoolerp.fixtures.TenantFixtures;
 import org.example.schoolerp.identity.repo.UserRepository;
@@ -11,10 +14,12 @@ import org.example.schoolerp.security.auth.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 public class AuthTestSupport extends TenantTestSupport {
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired protected MockMvc mockMvc;
   @Autowired protected TenantFixtures fixtures;
@@ -44,8 +49,8 @@ public class AuthTestSupport extends TenantTestSupport {
 
     String body =
         """
-                {"organizationId": "%s","username":"%s","password":"%s"}
-                """
+        {"organizationId": "%s","username":"%s","password":"%s"}
+        """
             .formatted(org.getId(), username, rawPassoword);
 
     var result =
@@ -63,8 +68,8 @@ public class AuthTestSupport extends TenantTestSupport {
 
     String body =
         """
-                {"organizationId": "%s","username":"%s","password":"%s"}
-                """
+        {"organizationId": "%s","username":"%s","password":"%s"}
+        """
             .formatted(org.getId(), username, password);
 
     asTenantVoid(
@@ -94,5 +99,24 @@ public class AuthTestSupport extends TenantTestSupport {
   protected MockMultipartHttpServletRequestBuilder authed(
       MockMultipartHttpServletRequestBuilder builder, LoggedInUser user) {
     return builder.header("Authorization", "Bearer " + user.token);
+  }
+
+  protected ResultActions postJson(
+      String url, LoggedInUser user, Object body, Object... pathVariables) throws Exception {
+    return mockMvc.perform(
+        authed(post(url, pathVariables), user)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(body)));
+  }
+
+  protected ResultActions getJson(
+      String url, LoggedInUser user, Map<String, String> params, Object... pathVariables)
+      throws Exception {
+    var req = authed(get(url, pathVariables), user);
+
+    if (params != null) {
+      params.forEach(req::param);
+    }
+    return mockMvc.perform(req);
   }
 }

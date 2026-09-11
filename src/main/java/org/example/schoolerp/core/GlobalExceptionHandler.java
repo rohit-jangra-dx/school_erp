@@ -3,6 +3,7 @@ package org.example.schoolerp.core;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -53,6 +54,18 @@ public class GlobalExceptionHandler {
                 Instant.now().toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Malformed request body",
+                null));
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+        .body(
+            new ApiError(
+                Instant.now().toString(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict in request data",
                 null));
   }
 
