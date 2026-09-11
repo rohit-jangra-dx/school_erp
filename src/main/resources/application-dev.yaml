@@ -3,9 +3,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/school_erp
     username: erp_admin
     password: erp_admin_password
+  flyway:
+    validate-migration-naming: true
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -22,8 +24,17 @@ school-erp:
 
 logging:
   level:
+    '[org.hibernate]': warn
+    '[org.apache.tomcat]': warn
+    '[org.apache.catalina]': warn
+    '[org.springframework]': warn
+    '[com.zaxxer.hikari]': warn
+
     '[org.example.schoolerp]': debug
     '[org.springframework.security]': debug
+    '[org.flywaydb]': info
+
+
   pattern:
     console: "%d{HH:mm:ss} %highlight(%-5level) [%X{correlationId}] %cyan([%logger{0}]) - %msg%n"
 
