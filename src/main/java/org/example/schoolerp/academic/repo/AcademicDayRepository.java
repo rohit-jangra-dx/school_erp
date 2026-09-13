@@ -2,11 +2,14 @@ package org.example.schoolerp.academic.repo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.example.schoolerp.academic.entity.AcademicDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AcademicDayRepository extends JpaRepository<AcademicDay, UUID> {
+  Optional<AcademicDay> findByAcademicYearIdAndDate(UUID academicYearId, LocalDate date);
+
   List<AcademicDay> findByAcademicYearId(UUID academicYearId);
 
   List<AcademicDay> findByAcademicYearIdAndDateBetween(

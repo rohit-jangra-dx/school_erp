@@ -4,10 +4,12 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.example.schoolerp.academic.entity.DayType;
 
 @Data
 @AllArgsConstructor
-public class CreateAcademicCalendarRequest {
-  @NotNull private LocalDate startDate;
-  @NotNull private LocalDate endDate;
+public class UpdateAcademicDaybyDateRequest {
+  @NotNull private LocalDate date;
+  private DayType dayType;
+  private String note;
 }

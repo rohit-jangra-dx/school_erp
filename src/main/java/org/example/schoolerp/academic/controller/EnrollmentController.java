@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.controller;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

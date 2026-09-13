@@ -1,4 +1,4 @@
-package org.example.schoolerp.academic;
+package org.example.schoolerp.academic.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;

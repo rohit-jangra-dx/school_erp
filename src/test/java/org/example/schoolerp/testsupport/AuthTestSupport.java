@@ -2,9 +2,9 @@ package org.example.schoolerp.testsupport;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.UUID;
 import org.example.schoolerp.fixtures.TenantFixtures;
@@ -17,9 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import tools.jackson.databind.json.JsonMapper;
 
 public class AuthTestSupport extends TenantTestSupport {
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Autowired protected JsonMapper objectMapper;
 
   @Autowired protected MockMvc mockMvc;
   @Autowired protected TenantFixtures fixtures;
@@ -118,5 +119,13 @@ public class AuthTestSupport extends TenantTestSupport {
       params.forEach(req::param);
     }
     return mockMvc.perform(req);
+  }
+
+  protected ResultActions putJson(
+      String url, LoggedInUser user, Object body, Object... pathVariables) throws Exception {
+    return mockMvc.perform(
+        authed(put(url, pathVariables), user)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(body)));
   }
 }

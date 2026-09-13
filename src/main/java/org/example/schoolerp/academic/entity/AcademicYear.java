@@ -8,7 +8,8 @@ import org.example.schoolerp.core.OrganizationOwned;
 
 /**
  * FIXME: There is a possibility of creating duplicate years. No constraints on the startDate +
- * OrganizationId there to enforce
+ * OrganizationId there to enforce This has to be done on database level some kind of function or
+ * extension etc.
  */
 @Entity
 @Table(name = "academic_years")

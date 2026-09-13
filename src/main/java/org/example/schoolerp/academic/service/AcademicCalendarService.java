@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.schoolerp.academic.dto.AcademicDayResponse;
 import org.example.schoolerp.academic.dto.AcademicYearResponse;
 import org.example.schoolerp.academic.entity.AcademicYear;
 import org.example.schoolerp.academic.repo.AcademicDayRepository;
@@ -32,16 +31,20 @@ public class AcademicCalendarService {
     return new AcademicYearResponse(year.getId(), year.getStartDate(), year.getEndDate());
   }
 
-  public List<AcademicDayResponse> getCalendarDaysById(UUID id) {
-    return academicDayRepository.findByAcademicYearId(id).stream()
-        .map(day -> new AcademicDayResponse(day.getDate(), day.getDayType(), day.getNote()))
+  @Transactional(readOnly = true)
+  public List<AcademicYearResponse> getAllAcademicYears() {
+    return academicYearRepository.findAll().stream()
+        .map(year -> new AcademicYearResponse(year))
         .toList();
   }
 
-  public List<AcademicDayResponse> getCalendarByDaysByDateRange(
-      UUID id, LocalDate from, LocalDate to) {
-    return academicDayRepository.findByAcademicYearIdAndDateBetween(id, from, to).stream()
-        .map(day -> new AcademicDayResponse(day.getDate(), day.getDayType(), day.getNote()))
-        .toList();
+  @Transactional(readOnly = true)
+  public AcademicYearResponse getAcademicYear(UUID id) {
+    var year =
+        academicYearRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Year not found: " + id));
+
+    return new AcademicYearResponse(year);
   }
 }

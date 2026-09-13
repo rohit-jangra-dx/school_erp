@@ -14,8 +14,8 @@ import org.example.schoolerp.student.Student;
           name = "enrollment_academic_year_student",
           columnNames = {"academic_year_id", "student_id"}),
       @UniqueConstraint(
-          name = "enrollment_class_section_roll_no",
-          columnNames = {"class_section_id", "roll_no"})
+          name = "enrollment_academic_year_class_section_roll_no",
+          columnNames = {"academic_year_id", "class_section_id", "roll_no"})
     })
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
