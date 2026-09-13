@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.academic.dto.AcademicDayResponse;
 import org.example.schoolerp.academic.dto.UpdateAcademicDayRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicDaybyDateRequest;
 import org.example.schoolerp.academic.service.AcademicDayService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/academic-calendars")
 @RequiredArgsConstructor
-public class AcademicCalendarDays {
+public class AcademicCalendarDaysController {
 
   private final AcademicDayService academicDayService;
 
   @GetMapping("/{id}/days")
   public ResponseEntity<List<AcademicDayResponse>> getCalendarDays(
-      @PathVariable UUID id, @RequestParam LocalDate from, @RequestParam LocalDate to) {
+      @PathVariable UUID id,
+      @RequestParam(required = false) LocalDate from,
+      @RequestParam(required = false) LocalDate to) {
     List<AcademicDayResponse> calendarDays;
 
-    if (from == null && to == null) {
+    if (from == null || to == null) {
       calendarDays = academicDayService.getAcademicDays(id);
     } else {
       calendarDays = academicDayService.getAcademicDays(id, from, to);
@@ -40,7 +43,7 @@ public class AcademicCalendarDays {
   /** NOTE: id not needed since i req body itself */
   @PutMapping("/{id}/days")
   public ResponseEntity<List<AcademicDayResponse>> updateCalendarDays(
-      @PathVariable UUID id, @RequestBody List<UpdateAcademicDayRequest> entities) {
+      @PathVariable UUID id, @RequestBody List<UpdateAcademicDaybyDateRequest> entities) {
     var updatedDays = academicDayService.updateAcademicDays(id, entities);
 
     return ResponseEntity.ok(updatedDays);
@@ -48,7 +51,7 @@ public class AcademicCalendarDays {
 
   /** useless calendar id, day can be fetched even without it */
   @GetMapping("/days/{id}")
-  public ResponseEntity<AcademicDayResponse> getCalendarDay(@RequestParam UUID id) {
+  public ResponseEntity<AcademicDayResponse> getCalendarDay(@PathVariable UUID id) {
     var day = academicDayService.getAcademicDay(id);
 
     return ResponseEntity.ok(day);

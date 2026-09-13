@@ -1,12 +1,16 @@
 package org.example.schoolerp.fixtures;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import net.datafaker.Faker;
 import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
 import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicDayRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicDaybyDateRequest;
 import org.example.schoolerp.academic.entity.AcademicYear;
+import org.example.schoolerp.academic.entity.DayType;
 import org.example.schoolerp.academic.repo.AcademicYearRepository;
 import org.example.schoolerp.fixtures.TenantFixtures.TenantFixture;
 import org.example.schoolerp.organization.Organization;
@@ -25,7 +29,7 @@ public class AcademicFixtures {
 
   public AcademicYear createYear() {
     var start = faker.timeAndDate().birthday();
-    var end = start.plusYears(1).minusDays(-1);
+    var end = start.plusYears(1).minusDays(1);
     var year = new AcademicYear(start, end);
 
     year = academicYearRepository.save(year);
@@ -54,7 +58,7 @@ public class AcademicFixtures {
 
   public CreateAcademicCalendarRequest createAcademicCalendarRequest() {
     var startDate = faker.timeAndDate().birthday();
-    var endDate = startDate.plusYears(1).minusDays(-1);
+    var endDate = startDate.plusYears(1).minusDays(1);
 
     return new CreateAcademicCalendarRequest(startDate, endDate);
   }
@@ -70,6 +74,32 @@ public class AcademicFixtures {
     LocalDate endDate = startDate.plusYears(1).minusDays(1);
 
     return new CreateAcademicCalendarRequest(startDate, endDate);
+  }
+
+  public UpdateAcademicDayRequest updateAcademicDayRequest() {
+
+    return new UpdateAcademicDayRequest(
+        faker
+            .options()
+            .option(
+                DayType.HOLIDAY, DayType.HALF_DAY, DayType.EVENT, DayType.WEEKEND, DayType.WORKING),
+        "");
+  }
+
+  public UpdateAcademicDaybyDateRequest updateAcademicDaybyDateRequest(
+      LocalDate startDate, LocalDate endDate) {
+    // random but still it will belong to the calendar
+    LocalDate randomDate =
+        startDate.plusDays(
+            faker.random().nextLong(ChronoUnit.DAYS.between(startDate, endDate) + 1));
+
+    return new UpdateAcademicDaybyDateRequest(
+        randomDate,
+        faker
+            .options()
+            .option(
+                DayType.HOLIDAY, DayType.HALF_DAY, DayType.EVENT, DayType.WEEKEND, DayType.WORKING),
+        "");
   }
 
   public CreateAcademicClassRequest createAcademicClassRequest() {

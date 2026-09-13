@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.academic.dto.AcademicDayResponse;
 import org.example.schoolerp.academic.dto.UpdateAcademicDayRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicDaybyDateRequest;
 import org.example.schoolerp.academic.entity.AcademicDay;
 import org.example.schoolerp.academic.entity.AcademicYear;
 import org.example.schoolerp.academic.entity.DayType;
@@ -74,7 +75,7 @@ public class AcademicDayService {
 
   @Transactional
   public List<AcademicDayResponse> updateAcademicDays(
-      UUID academicYearId, List<UpdateAcademicDayRequest> requests) {
+      UUID academicYearId, List<UpdateAcademicDaybyDateRequest> requests) {
     return requests.stream()
         .map(
             req -> {
@@ -101,7 +102,7 @@ public class AcademicDayService {
     var day =
         academicDayRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Day not found: " + request.getDate()));
+            .orElseThrow(() -> new IllegalArgumentException("Day not found: " + id));
 
     if (request.getNote() != null) {
       day.setNote(request.getNote());

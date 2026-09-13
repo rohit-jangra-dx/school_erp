@@ -2,6 +2,7 @@ package org.example.schoolerp.testsupport;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Map;
@@ -118,5 +119,13 @@ public class AuthTestSupport extends TenantTestSupport {
       params.forEach(req::param);
     }
     return mockMvc.perform(req);
+  }
+
+  protected ResultActions putJson(
+      String url, LoggedInUser user, Object body, Object... pathVariables) throws Exception {
+    return mockMvc.perform(
+        authed(put(url, pathVariables), user)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(body)));
   }
 }
