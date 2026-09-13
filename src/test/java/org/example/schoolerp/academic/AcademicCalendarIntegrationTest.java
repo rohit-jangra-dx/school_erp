@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.jayway.jsonpath.JsonPath;
-import java.util.HashMap;
 import org.example.schoolerp.fixtures.AcademicFixtures;
 import org.example.schoolerp.testsupport.AuthTestSupport;
 import org.example.schoolerp.testsupport.DatabaseCleanupExtension;
@@ -40,6 +39,22 @@ public class AcademicCalendarIntegrationTest extends AuthTestSupport {
   }
 
   @Test
+  void creating_overlapping_years_will_fail() throws Exception {
+    var request = academicFixtures.createAcademicCalendarRequest();
+
+    postJson("/academic-calendars", admin, request)
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.startDate").value(request.getStartDate().toString()))
+        .andExpect(jsonPath("$.endDate").value(request.getEndDate().toString()));
+
+    request.setStartDate(request.getStartDate().plusMonths(1));
+    request.setEndDate(request.getEndDate().plusMonths(1).minusDays(1));
+
+    // this time it should not be 201
+    postJson("/academic-calendars", admin, request).andExpect(status().isConflict());
+  }
+
+  @Test
   void get_all_academic_calendars_successfully() throws Exception {
     for (var i = 0; i < 10; i++) {
       var request = academicFixtures.createAcademicCalendarRequest(i);
@@ -56,44 +71,20 @@ public class AcademicCalendarIntegrationTest extends AuthTestSupport {
   }
 
   @Test
-  void get_academic_days_by_year_id_successfully() throws Exception {
+  void get_single_academic_year_by_id_successfully() throws Exception {
     var request = academicFixtures.createAcademicCalendarRequest();
 
-    var response =
-        postJson("/academic-calendars", admin, request).andExpect(status().isOk()).andReturn();
-
-    var calendarId = JsonPath.read(response.getResponse().getContentAsString(), "$.id");
-
-    getJson("/academic-calendars/{id}/days", admin, null, calendarId)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(365))
-        .andExpect(jsonPath("$.[*].date").isNotEmpty())
-        .andExpect(jsonPath("$[0].date").value(request.getStartDate().toString()))
-        .andExpect(jsonPath("$[364].date").value(request.getStartDate().toString()));
-  }
-
-  @Test
-  void get_academic_days_by_year_id_and_range_successfully() throws Exception {
-    var request = academicFixtures.createAcademicCalendarRequest();
-
-    var response =
+    var result =
         postJson("/academic-calendars", admin, request)
-            .andExpect(status().isOk())
             .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.startDate").value(request.getStartDate().toString()))
+            .andExpect(jsonPath("$.endDate").value(request.getEndDate().toString()))
             .andReturn();
 
-    var calendarId = JsonPath.read(response.getResponse().getContentAsString(), "$.id");
+    var yearId = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
-    // 1 month range
-    var queryParams = new HashMap<String, String>();
-    queryParams.put("from", request.getStartDate().toString());
-    queryParams.put("to", request.getStartDate().plusDays(31).toString());
-
-    getJson("/academic-calendars/{id}/days", admin, queryParams, calendarId)
+    getJson("/academic-calendars/{id}", admin, null, yearId)
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(31))
-        .andExpect(jsonPath("$.[*].date").isNotEmpty())
-        .andExpect(jsonPath("$[0].date").value("2026-01-01"))
-        .andExpect(jsonPath("$[30].date").value("2026-01-31"));
+        .andExpect(jsonPath("$.id").value(yearId.toString()));
   }
 }

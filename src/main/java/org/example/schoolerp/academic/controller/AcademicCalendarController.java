@@ -3,9 +3,9 @@ package org.example.schoolerp.academic.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.academic.dto.AcademicYearResponse;
 import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
-import org.example.schoolerp.academic.dto.UpdateAcademicYearRequest;
 import org.example.schoolerp.academic.service.AcademicCalendarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,20 +13,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/academic-calendars")
+@RequiredArgsConstructor
 public class AcademicCalendarController {
 
   private final AcademicCalendarService academicCalendarService;
-
-  AcademicCalendarController(AcademicCalendarService academicCalendarService) {
-    this.academicCalendarService = academicCalendarService;
-  }
 
   @PostMapping
   public ResponseEntity<AcademicYearResponse> createCalendar(
@@ -44,13 +40,6 @@ public class AcademicCalendarController {
   @GetMapping("/{id}")
   public ResponseEntity<AcademicYearResponse> getMethodName(@PathVariable UUID id) {
     var year = academicCalendarService.getAcademicYear(id);
-    return ResponseEntity.ok(year);
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<AcademicYearResponse> putMethodName(
-      @PathVariable UUID id, @Valid @RequestBody UpdateAcademicYearRequest entity) {
-    var year = academicCalendarService.updateAcademicYear(id, entity);
     return ResponseEntity.ok(year);
   }
 

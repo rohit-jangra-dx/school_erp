@@ -6,7 +6,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.schoolerp.academic.dto.AcademicYearResponse;
-import org.example.schoolerp.academic.dto.UpdateAcademicYearRequest;
 import org.example.schoolerp.academic.entity.AcademicYear;
 import org.example.schoolerp.academic.repo.AcademicDayRepository;
 import org.example.schoolerp.academic.repo.AcademicYearRepository;
@@ -48,23 +47,4 @@ public class AcademicCalendarService {
 
     return new AcademicYearResponse(year);
   }
-
-  @Transactional
-  public AcademicYearResponse updateAcademicYear(UUID id, UpdateAcademicYearRequest request) {
-    var year =
-        academicYearRepository
-            .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Year not found: " + id));
-
-    if (request.getStartDate() != null) {
-      year.setStartDate(request.getStartDate());
-    }
-    if (request.getEndDate() != null) {
-      year.setEndDate(request.getEndDate());
-    }
-
-    return new AcademicYearResponse(year);
-  }
-
-  //   academic days
 }

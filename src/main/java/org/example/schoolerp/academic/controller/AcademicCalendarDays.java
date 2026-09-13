@@ -24,17 +24,15 @@ public class AcademicCalendarDays {
   private final AcademicDayService academicDayService;
 
   @GetMapping("/{id}/days")
-  public ResponseEntity<List<AcademicDayResponse>> getCalendarDaysByCalendarId(
-      @PathVariable UUID id) {
-    var calendarDays = academicDayService.getAcademicDays(id);
-
-    return ResponseEntity.ok(calendarDays);
-  }
-
-  @GetMapping("/{id}/days")
-  public ResponseEntity<List<AcademicDayResponse>> getMethodName(
+  public ResponseEntity<List<AcademicDayResponse>> getCalendarDays(
       @PathVariable UUID id, @RequestParam LocalDate from, @RequestParam LocalDate to) {
-    var calendarDays = academicDayService.getAcademicDays(id, from, to);
+    List<AcademicDayResponse> calendarDays;
+
+    if (from == null && to == null) {
+      calendarDays = academicDayService.getAcademicDays(id);
+    } else {
+      calendarDays = academicDayService.getAcademicDays(id, from, to);
+    }
 
     return ResponseEntity.ok(calendarDays);
   }

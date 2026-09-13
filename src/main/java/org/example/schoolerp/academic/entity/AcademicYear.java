@@ -27,12 +27,4 @@ public class AcademicYear extends OrganizationOwned {
     this.startDate = startDate;
     this.endDate = endDate;
   }
-
-  public void setStartDate(LocalDate date) {
-    this.startDate = date;
-  }
-
-  public void setEndDate(LocalDate date) {
-    this.endDate = date;
-  }
 }
