@@ -1,7 +1,9 @@
 package org.example.schoolerp.fixtures;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import net.datafaker.Faker;
+import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
 import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
 import org.example.schoolerp.academic.entity.AcademicYear;
@@ -46,6 +48,28 @@ public class AcademicFixtures {
     teacher = teacherRepository.save(teacher);
 
     return teacher;
+  }
+
+  //   requests
+
+  public CreateAcademicCalendarRequest createAcademicCalendarRequest() {
+    var startDate = faker.timeAndDate().birthday();
+    var endDate = startDate.plusYears(1).minusDays(-1);
+
+    return new CreateAcademicCalendarRequest(startDate, endDate);
+  }
+
+  /**
+   * use it for mass continuous years creation
+   *
+   * @param yearOffset
+   * @return CreateAcademicCalendarRequest
+   */
+  public CreateAcademicCalendarRequest createAcademicCalendarRequest(int yearOffset) {
+    LocalDate startDate = LocalDate.of(2020 + yearOffset, 4, 1);
+    LocalDate endDate = startDate.plusYears(1).minusDays(1);
+
+    return new CreateAcademicCalendarRequest(startDate, endDate);
   }
 
   public CreateAcademicClassRequest createAcademicClassRequest() {

@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.UUID;
 import org.example.schoolerp.fixtures.TenantFixtures;
@@ -17,9 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import tools.jackson.databind.json.JsonMapper;
 
 public class AuthTestSupport extends TenantTestSupport {
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Autowired protected JsonMapper objectMapper;
 
   @Autowired protected MockMvc mockMvc;
   @Autowired protected TenantFixtures fixtures;

@@ -38,7 +38,7 @@ public class AcademicDay extends OrganizationOwned {
     this.dayType = dayType;
   }
 
-  public void setStatus(DayType dayType) {
+  public void setDayType(DayType dayType) {
     this.dayType = dayType;
   }
 

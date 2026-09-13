@@ -33,6 +33,10 @@ public class EnrollmentService {
     @NotNull private Integer rollNo;
   }
 
+  // FIXME: make sure classSection's year is similar to the year provided to avoid illegal state
+  // enrollment
+  // NOTE: same will come in attendance where u would be getting enrollment and year, solution is
+  // repo ....
   @Transactional
   public void CreateEnrollment(CreateEnrollmentRequest request) {
     var academicYear =
