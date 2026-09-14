@@ -1,20 +1,19 @@
 package org.example.schoolerp.academic.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.academic.dto.AcademicClassResponse;
 import org.example.schoolerp.academic.dto.AcademicClassWithSectionsResponse;
-import org.example.schoolerp.academic.dto.ClassSectionResponse;
 import org.example.schoolerp.academic.dto.ClassSectionSummaryResponse;
-import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
+import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicClassRequest;
 import org.example.schoolerp.academic.entity.AcademicClass;
 import org.example.schoolerp.academic.entity.ClassSection;
 import org.example.schoolerp.academic.repo.AcademicClassRepository;
-import org.example.schoolerp.academic.repo.AcademicYearRepository;
 import org.example.schoolerp.academic.repo.ClassSectionRepository;
-import org.example.schoolerp.staff.TeacherRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,19 +23,18 @@ public class AcademicClassService {
 
   private final AcademicClassRepository academicClassRepository;
   private final ClassSectionRepository classSectionRepository;
-  private final AcademicYearRepository academicYearRepository;
-  private final TeacherRepository teacherRepository;
 
   @Transactional
-  public AcademicClassResponse createClass(String name) {
-    var academicClass = academicClassRepository.save(new AcademicClass(name));
+  public AcademicClassWithSectionsResponse create(CreateAcademicClassRequest request) {
+    var academicClass = academicClassRepository.save(new AcademicClass(request.getName()));
 
-    return new AcademicClassResponse(academicClass);
+    return new AcademicClassWithSectionsResponse(
+        academicClass, new ArrayList<ClassSectionSummaryResponse>());
   }
 
   @SuppressWarnings("null")
   @Transactional(readOnly = true)
-  public List<AcademicClassWithSectionsResponse> getClassesWithSections() {
+  public List<AcademicClassWithSectionsResponse> getAll() {
     return classSectionRepository.findAll().stream()
         .collect(Collectors.groupingBy(ClassSection::getAcademicClass))
         .entrySet()
@@ -47,52 +45,37 @@ public class AcademicClassService {
               var sections = entry.getValue();
 
               return new AcademicClassWithSectionsResponse(
-                  academicClass.getId(),
-                  academicClass.getName(),
-                  sections.stream().map(ClassSectionSummaryResponse::new).toList());
+                  academicClass, sections.stream().map(ClassSectionSummaryResponse::new).toList());
             })
         .toList();
   }
 
   @Transactional(readOnly = true)
-  public List<ClassSectionResponse> getclassesWithSectionByClassId(UUID id) {
-    return classSectionRepository.findByAcademicClassId(id).stream()
-        .map(ClassSectionResponse::new)
-        .toList();
+  public AcademicClassWithSectionsResponse getSections(UUID id) {
+    var academicClass =
+        academicClassRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Class not found: " + id));
+
+    var sections =
+        classSectionRepository.findByAcademicClassId(id).stream()
+            .map(ClassSectionSummaryResponse::new)
+            .toList();
+
+    return new AcademicClassWithSectionsResponse(academicClass, sections);
   }
 
   @Transactional
-  public ClassSectionResponse createSection(UUID classId, CreateClassSectionRequest request) {
-    var academicYear =
-        academicYearRepository
-            .findById(request.getAcademicYearId())
-            .orElseThrow(
-                () ->
-                    new IllegalArgumentException(
-                        "Academic Year not found: " + request.getAcademicYearId()));
-
+  public AcademicClassResponse update(UUID id, UpdateAcademicClassRequest request) {
     var academicClass =
         academicClassRepository
-            .findById(classId)
-            .orElseThrow(
-                () -> new IllegalArgumentException("Academic Class not found: " + classId));
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Class not found: " + id));
 
-    var teacher =
-        teacherRepository
-            .findById(request.getTeacherId())
-            .orElseThrow(
-                () -> new IllegalArgumentException("Teacher not found: " + request.getTeacherId()));
+    if (request.getName() != null) {
+      academicClass.setName(request.getName());
+    }
 
-    var classSection =
-        new ClassSection(
-            academicClass,
-            academicYear,
-            teacher,
-            request.getName(),
-            request.getRoom(),
-            request.getCapacity());
-    classSectionRepository.save(classSection);
-
-    return new ClassSectionResponse(classSection);
+    return new AcademicClassResponse(academicClass);
   }
 }
