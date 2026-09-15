@@ -56,4 +56,20 @@ public class ClassSection extends OrganizationOwned {
     this.room = room;
     this.capacity = capacity;
   }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setRoom(Integer room) {
+    this.room = room;
+  }
+
+  public void setCapacity(Integer capacity) {
+    this.capacity = capacity;
+  }
+
+  public void setTeacher(Teacher teacher) {
+    this.teacher = teacher;
+  }
 }

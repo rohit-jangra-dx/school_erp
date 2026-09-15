@@ -1,9 +1,11 @@
 package org.example.schoolerp.academic.service;
 
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.example.schoolerp.academic.dto.ClassSectionResponse;
 import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
+import org.example.schoolerp.academic.dto.UpdateClassSectionRequest;
 import org.example.schoolerp.academic.entity.ClassSection;
 import org.example.schoolerp.academic.repo.AcademicClassRepository;
 import org.example.schoolerp.academic.repo.AcademicYearRepository;
@@ -54,5 +56,48 @@ public class AcademicClassSectionService {
     classSectionRepository.save(classSection);
 
     return new ClassSectionResponse(classSection);
+  }
+
+  @Transactional(readOnly = true)
+  public List<ClassSectionResponse> getall(UUID classId) {
+    return classSectionRepository.findByAcademicClassId(classId).stream()
+        .map(ClassSectionResponse::new)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public ClassSectionResponse get(UUID id) {
+    var section =
+        classSectionRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Class section not found: " + id));
+
+    return new ClassSectionResponse(section);
+  }
+
+  @Transactional
+  public ClassSectionResponse update(UUID id, UpdateClassSectionRequest request) {
+    var section =
+        classSectionRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Class section not found: " + id));
+
+    if (request.getName() != null) {
+      section.setName(request.getName());
+    }
+    if (request.getRoom() != null) {
+      section.setRoom(request.getRoom());
+    }
+    if (request.getTeacherId() != null) {
+      var teacher =
+          teacherRepository
+              .findById(request.getTeacherId())
+              .orElseThrow(
+                  () ->
+                      new IllegalArgumentException("Teacher not found: " + request.getTeacherId()));
+      section.setTeacher(teacher);
+    }
+
+    return new ClassSectionResponse(section);
   }
 }

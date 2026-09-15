@@ -40,13 +40,13 @@ public class AcademicClassController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<AcademicClassWithSectionsResponse> getMethodName(@PathVariable UUID id) {
+  public ResponseEntity<AcademicClassWithSectionsResponse> get(@PathVariable UUID id) {
     var academicClass = academicClassService.getSections(id);
     return ResponseEntity.ok(academicClass);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<AcademicClassResponse> putMethodName(
+  public ResponseEntity<AcademicClassResponse> update(
       @PathVariable UUID id, @Valid @RequestBody UpdateAcademicClassRequest entity) {
     var updatedAcademicClass = academicClassService.update(id, entity);
     return ResponseEntity.ok(updatedAcademicClass);
