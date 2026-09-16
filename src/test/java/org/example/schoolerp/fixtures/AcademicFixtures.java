@@ -7,8 +7,10 @@ import net.datafaker.Faker;
 import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
 import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
+import org.example.schoolerp.academic.dto.UpdateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.UpdateAcademicDayRequest;
 import org.example.schoolerp.academic.dto.UpdateAcademicDaybyDateRequest;
+import org.example.schoolerp.academic.dto.UpdateClassSectionRequest;
 import org.example.schoolerp.academic.entity.AcademicYear;
 import org.example.schoolerp.academic.entity.DayType;
 import org.example.schoolerp.academic.repo.AcademicYearRepository;
@@ -100,6 +102,19 @@ public class AcademicFixtures {
             .option(
                 DayType.HOLIDAY, DayType.HALF_DAY, DayType.EVENT, DayType.WEEKEND, DayType.WORKING),
         "");
+  }
+
+  public UpdateAcademicClassRequest updateAcademicClassRequest() {
+    return new UpdateAcademicClassRequest(String.valueOf(faker.number().numberBetween(1, 10)));
+  }
+
+  public UpdateClassSectionRequest updateClassSectionRequest(int nameCounter) {
+    String sectionName = String.valueOf((char) ('A') + nameCounter);
+    return new UpdateClassSectionRequest(
+        sectionName,
+        faker.number().numberBetween(1, 10),
+        faker.number().numberBetween(30, 50),
+        null);
   }
 
   public CreateAcademicClassRequest createAcademicClassRequest() {
