@@ -44,4 +44,12 @@ public class Enrollment extends OrganizationOwned {
     this.student = student;
     this.rollNo = rollNo;
   }
+
+  public void setClassSection(ClassSection classSection) {
+    this.classSection = classSection;
+  }
+
+  public void setRollNo(Integer rollNo) {
+    this.rollNo = rollNo;
+  }
 }
