@@ -88,6 +88,9 @@ public class AcademicClassSectionService {
     if (request.getRoom() != null) {
       section.setRoom(request.getRoom());
     }
+    if (request.getCapacity() != null) {
+      section.setCapacity(request.getCapacity());
+    }
     if (request.getTeacherId() != null) {
       var teacher =
           teacherRepository

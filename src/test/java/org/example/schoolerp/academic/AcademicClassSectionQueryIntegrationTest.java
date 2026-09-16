@@ -88,7 +88,7 @@ public class AcademicClassSectionQueryIntegrationTest extends AuthTestSupport {
     // now fetch all the sections of the class
     getJson("/academic-classes/{id}", admin, null, classId)
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(10)));
+        .andExpect(jsonPath("$.sections").isArray())
+        .andExpect(jsonPath("$.sections", hasSize(10)));
   }
 }
