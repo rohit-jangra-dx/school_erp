@@ -38,7 +38,7 @@ public class AcademicClassSectionCreationIntegrationTest extends AuthTestSupport
   void setup() throws Exception {
     admin = loginAsNewUser("test_org", "test_user", "test_pass");
 
-    academicYear = asTenant(admin.orgId(), () -> academicFixtures.createYear());
+    academicYear = asTenant(admin.orgId(), () -> academicFixtures.createAcademicYear());
     teacher = asTenant(admin.orgId(), () -> academicFixtures.createTeacher(admin.organization()));
 
     // create a class
