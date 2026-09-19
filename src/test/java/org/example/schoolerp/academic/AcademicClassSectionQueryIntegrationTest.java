@@ -31,7 +31,7 @@ public class AcademicClassSectionQueryIntegrationTest extends AuthTestSupport {
   void setup() throws Exception {
     admin = loginAsNewUser("test_org", "test_user", "test_pass");
 
-    academicYear = asTenant(admin.orgId(), () -> fixtures.createYear());
+    academicYear = asTenant(admin.orgId(), () -> fixtures.createAcademicYear());
   }
 
   @Test

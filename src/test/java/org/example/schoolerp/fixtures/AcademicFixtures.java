@@ -7,17 +7,25 @@ import net.datafaker.Faker;
 import org.example.schoolerp.academic.dto.CreateAcademicCalendarRequest;
 import org.example.schoolerp.academic.dto.CreateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.CreateClassSectionRequest;
+import org.example.schoolerp.academic.dto.CreateEnrollmentRequest;
 import org.example.schoolerp.academic.dto.UpdateAcademicClassRequest;
 import org.example.schoolerp.academic.dto.UpdateAcademicDayRequest;
 import org.example.schoolerp.academic.dto.UpdateAcademicDaybyDateRequest;
 import org.example.schoolerp.academic.dto.UpdateClassSectionRequest;
+import org.example.schoolerp.academic.dto.UpdateEnrollmentRequest;
+import org.example.schoolerp.academic.entity.AcademicClass;
 import org.example.schoolerp.academic.entity.AcademicYear;
+import org.example.schoolerp.academic.entity.ClassSection;
 import org.example.schoolerp.academic.entity.DayType;
+import org.example.schoolerp.academic.repo.AcademicClassRepository;
 import org.example.schoolerp.academic.repo.AcademicYearRepository;
+import org.example.schoolerp.academic.repo.ClassSectionRepository;
 import org.example.schoolerp.fixtures.TenantFixtures.TenantFixture;
 import org.example.schoolerp.organization.Organization;
 import org.example.schoolerp.staff.Teacher;
 import org.example.schoolerp.staff.TeacherRepository;
+import org.example.schoolerp.student.Student;
+import org.example.schoolerp.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +35,24 @@ public class AcademicFixtures {
 
   @Autowired private AcademicYearRepository academicYearRepository;
   @Autowired private TeacherRepository teacherRepository;
+  @Autowired private AcademicClassRepository academicClassRepository;
+  @Autowired private ClassSectionRepository classSectionRepository;
+  @Autowired private StudentRepository studentRepository;
   @Autowired private TenantFixtures tenantFixtures;
 
-  public AcademicYear createYear() {
+  public AcademicYear createAcademicYear() {
     var start = faker.timeAndDate().birthday();
     var end = start.plusYears(1).minusDays(1);
     var year = new AcademicYear(start, end);
+
+    year = academicYearRepository.save(year);
+
+    return year;
+  }
+
+  public AcademicYear createAcademicYear(LocalDate startDate) {
+    var end = startDate.plusYears(1).minusDays(1);
+    var year = new AcademicYear(startDate, end);
 
     year = academicYearRepository.save(year);
 
@@ -54,6 +74,47 @@ public class AcademicFixtures {
     teacher = teacherRepository.save(teacher);
 
     return teacher;
+  }
+
+  public Student createStudent(Organization org) {
+    var userFixture =
+        tenantFixtures.createUser(
+            org, faker.credentials().username(), faker.credentials().password());
+
+    var student =
+        new Student(
+            userFixture.user(),
+            faker.name().fullName(),
+            faker.internet().emailAddress(),
+            faker.timeAndDate().birthday(),
+            faker.options().option("Male", "Female"),
+            faker.address().fullAddress(),
+            faker.number().numberBetween(1, 30),
+            faker.number().numberBetween(1, 10));
+    studentRepository.save(student);
+    return student;
+  }
+
+  public AcademicClass createAcademicClass() {
+    var cls = new AcademicClass(String.valueOf(faker.number().numberBetween(1, 10)));
+    academicClassRepository.save(cls);
+    return cls;
+  }
+
+  public ClassSection createClassSection(
+      AcademicClass academicClass, AcademicYear year, Teacher teacher, int nameCounter) {
+
+    String sectionName = String.valueOf((char) ('A') + nameCounter);
+    var section =
+        new ClassSection(
+            academicClass,
+            year,
+            teacher,
+            sectionName,
+            faker.number().numberBetween(1, 10),
+            faker.number().numberBetween(30, 50));
+    classSectionRepository.save(section);
+    return section;
   }
 
   //   requests
@@ -132,5 +193,14 @@ public class AcademicFixtures {
         sectionName,
         faker.number().numberBetween(1, 20),
         faker.number().numberBetween(10, 50));
+  }
+
+  public CreateEnrollmentRequest createEnrollmentRequest(
+      UUID yearId, UUID sectionId, UUID studentId, int rollNoIndex) {
+    return new CreateEnrollmentRequest(sectionId, studentId, rollNoIndex + 1);
+  }
+
+  public UpdateEnrollmentRequest updateEnrollmentRequest(UUID sectionId) {
+    return new UpdateEnrollmentRequest(sectionId);
   }
 }

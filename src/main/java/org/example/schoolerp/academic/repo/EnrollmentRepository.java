@@ -19,15 +19,15 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
   @Query(
       """
       SELECT e from Enrollment e
-      WHERE (:from IS NULL OR e.createdAt >= :from)
-       AND (:to IS NULL OR e.createdAt <= :to)
+      WHERE (cast(:from as instant) IS NULL OR e.createdAt >= :from)
+       AND (cast(:to as instant) IS NULL OR e.createdAt <= :to)
       """)
   List<Enrollment> findByCreatedAtBetween(@Param("from") Instant from, @Param("to") Instant to);
 
   @Query(
       """
       SELECT MAX(e.rollNo)
-      FROM ENROLLMENT e
+      FROM Enrollment e
       WHERE e.classSection.id = :classSectionId
       """)
   Optional<Integer> findMaxRollNoByClassSectionId(@Param("classSectionId") UUID classSectionId);
